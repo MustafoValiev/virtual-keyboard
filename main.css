@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root{
+    width: 100vw;
+    height: 100vh;
+    background-color: blueviolet;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#keyboard{
+    width: 100%;
+    height: 300px;
+    padding: 10px 25px;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.keyboard-row{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button{
+    height: 50px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.button__regular{
+    width: 50px;
+    background: black;
+    color: white;
+}
+
+.button__large{
+    width: 70px;
+    background: green;
+    color: white;
+}
+
+.button__larger{
+    width: 90px;
+    background: green;
+    color: white;
+}
+
+
+.button:hover,
+.button__active{
+    background-color: aqua;
+}
