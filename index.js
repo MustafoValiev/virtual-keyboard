@@ -27,7 +27,7 @@ class Keyboard {
     this.buttons = buttons.flat();
     this.html = null;
     this.isUppercase = false;
-    languageIndicator.textContent = LANGUAGES[Keyboard.languageIndex];
+    languageIndicator.textContent = localStorage.getItem("lang");
 
     this.render();
   }
@@ -166,6 +166,7 @@ const changeKeyboardLanguage = () => {
   Keyboard.languageIndex = (Keyboard.languageIndex + 1) % LANGUAGES.length;
   languageIndicator.textContent = LANGUAGES[Keyboard.languageIndex];
   keyboard.buttons.forEach(button => button.changeLanguage());
+  localStorage.setItem("lang", LANGUAGES[Keyboard.languageIndex])
 };
 
 const checkForSpecialShortcuts = (e) => {
@@ -293,7 +294,7 @@ const keyboardButtons = [
     new Button('keyy', ['y', 'н'], ['y', 'н'], ['button__regular']),
     new Button('keyu', ['u', 'г'], ['u', 'г'], ['button__regular']),
     new Button('keyi', ['i', 'ш'], ['i', 'ш'], ['button__regular']),
-    new Button('keyo', ['o', 'щ'], ['o', 'ш'], ['button__regular']),
+    new Button('keyo', ['o', 'щ'], ['o', 'щ'], ['button__regular']),
     new Button('keyp', ['p', 'з'], ['p', 'з'], ['button__regular']),
     new Button('bracketLeft', ['[', 'х'], ['[', 'х'], ['button__regular']),
     new Button('bracketRight', [']', 'ъ'], [']', 'ъ'], ['button__regular']),
