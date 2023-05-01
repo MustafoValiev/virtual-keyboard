@@ -86,12 +86,12 @@
 }
 
 .button-capslock__on{
-    background: #e70a1c;
+    background: #c41414;
 }
 
 .button:hover,
 .button__active{
-    background-color: aqua;
+    background-color: #e0c91e;
 }
 
 #textArea{

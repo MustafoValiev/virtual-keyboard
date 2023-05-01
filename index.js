@@ -1,29 +1,29 @@
-    const body = document.querySelector("body");
-const root = document.createElement("div");
-root.id = "root";
+const body = document.querySelector('body');
+const root = document.createElement('div');
+root.id = 'root';
 
 body.append(root);
 
-const keyboardIndicator = document.createElement("div")
-keyboardIndicator.id = "keyboardIndicator";
-keyboardIndicator.textContent = "Windows Keyboard"
+const keyboardIndicator = document.createElement('div');
+keyboardIndicator.id = 'keyboardIndicator';
+keyboardIndicator.textContent = 'Windows Keyboard';
 root.appendChild(keyboardIndicator);
 
-const languageIndicator = document.createElement("div")
-languageIndicator.id = "languageIndicator";
+const languageIndicator = document.createElement('div');
+languageIndicator.id = 'languageIndicator';
 root.appendChild(languageIndicator);
 
 const textArea = document.createElement('textarea');
-textArea.id = "textArea";
+textArea.id = 'textArea';
 root.appendChild(textArea);
 
-const LANGUAGES = ["en", "ru"]
+const LANGUAGES = ['en', 'ru'];
 
 class Keyboard {
   static languageIndex = 0;
   static isLanguageChanged = false;
 
-  constructor(buttons) {
+  constructor (buttons) {
     this.buttons = buttons.flat();
     this.html = null;
     this.isUppercase = false;
@@ -35,47 +35,47 @@ class Keyboard {
   getHtml = () => this.html;
 
   render = () => {
-    this.html = document.createElement("div");
-    this.html.id = "keyboard";
-    root.appendChild(this.html)
-  }
+    this.html = document.createElement('div');
+    this.html.id = 'keyboard';
+    root.appendChild(this.html);
+  };
 
   addRow = (row) => {
-    this.html.appendChild(row)
-  }
+    this.html.appendChild(row);
+  };
 
   specialButtonPressedHandler = (key) => {
     if (key === 'capslock') {
       this.isUppercase = !this.isUppercase;
-      this.buttons.forEach(button => button.toggleRegistry(this.isUppercase))
+      this.buttons.forEach(button => button.toggleRegistry(this.isUppercase));
     }
-  }
+  };
 
   switchToSecondaryValues = () => {
-    this.buttons.forEach(button => button.switchToSecondaryValue())
-  }
+    this.buttons.forEach(button => button.switchToSecondaryValue());
+  };
 
   switchToPrimaryValues = () => {
-    this.buttons.forEach(button => button.switchToPrimaryValue())
-  }
+    this.buttons.forEach(button => button.switchToPrimaryValue());
+  };
 
   getButtonText = (key, isShiftPressed = false) => {
-    this.specialButtonPressedHandler(key)
+    this.specialButtonPressedHandler(key);
 
-    let buttons = this.buttons.filter(button => button.key === key)
+    const buttons = this.buttons.filter(button => button.key === key);
     if (buttons.length === 0) return '';
 
-    let text = buttons[0].getText();
+    const text = buttons[0].getText();
     return this.isUppercase
       ? isShiftPressed ? text.toLowerCase() : text.toUpperCase()
       : isShiftPressed ? text.toUpperCase() : text.toLowerCase();
-  }
+  };
 }
 
 class Row {
-  constructor(buttons, classes = []) {
+  constructor (buttons, classes = []) {
     this.buttons = buttons;
-    this.classes = ["keyboard-row", ...classes]
+    this.classes = ['keyboard-row', ...classes];
     this.html = null;
 
     this.render();
@@ -84,21 +84,21 @@ class Row {
   getHtml = () => this.html;
 
   render = () => {
-    this.html = document.createElement("div");
-    this.classes.forEach(c => this.html.classList.add(c))
+    this.html = document.createElement('div');
+    this.classes.forEach(c => this.html.classList.add(c));
 
     for (let j = 0; j < this.buttons.length; j++) {
-      this.html.appendChild(this.buttons[j].getHtml())
+      this.html.appendChild(this.buttons[j].getHtml());
     }
-  }
+  };
 }
 
 class Button {
-  constructor(key, textValues, buttonTextValue, classes = [], isFixed = false, isCapitalize = false, secondaryTextValue = "", secondaryButtonValue = "") {
+  constructor (key, textValues, buttonTextValue, classes = [], isFixed = false, isCapitalize = false, secondaryTextValue = '', secondaryButtonValue = '') {
     this.key = convertToProperCode(key);
     this.textValues = typeof (textValues) === 'string' ? new Array(LANGUAGES.length).fill(textValues) : textValues;
     this.buttonTextValues = typeof (buttonTextValue) === 'string' ? new Array(LANGUAGES.length).fill(buttonTextValue) : buttonTextValue;
-    this.classes = ["button", ...classes];
+    this.classes = ['button', ...classes];
     this.html = null;
     this.isFixed = isFixed;
     this.isCapitalize = isCapitalize;
@@ -116,81 +116,78 @@ class Button {
   toggleRegistry = (isUppercase) => {
     if (this.isFixed) {
       if (this.key === 'capslock') {
-        this.html.classList.add("button-capslock__on")
+        this.html.classList.add('button-capslock__on');
       }
       if (!isUppercase) {
         if (this.key === 'capslock') {
-          this.html.classList.remove("button-capslock__on")
+          this.html.classList.remove('button-capslock__on');
         }
       }
-      return
+      return;
     }
     if (isUppercase) {
-      this.html.textContent = this.html.textContent.toUpperCase()
-
-
+      this.html.textContent = this.html.textContent.toUpperCase();
     }
     if (!isUppercase) this.html.textContent = this.html.textContent.toLowerCase();
   };
 
   changeLanguage = () => {
-    this.html.textContent = this.buttonTextValues[Keyboard.languageIndex]
-  }
+    this.html.textContent = this.buttonTextValues[Keyboard.languageIndex];
+  };
 
   switchToSecondaryValue = () => {
     this.isUsingSecondary = true;
     if (this.secondaryButtonValue) this.html.textContent = this.secondaryButtonValue;
-  }
+  };
 
   switchToPrimaryValue = () => {
     this.isUsingSecondary = false;
-    this.html.textContent = this.buttonTextValues[Keyboard.languageIndex]
-  }
+    this.html.textContent = this.buttonTextValues[Keyboard.languageIndex];
+  };
 
   render = () => {
-    this.html = document.createElement("div");
+    this.html = document.createElement('div');
     this.classes.forEach(c => this.html.classList.add(c));
     this.html.textContent = this.isCapitalize ? capitaliseWord(this.buttonTextValues[Keyboard.languageIndex]) : this.buttonTextValues[Keyboard.languageIndex];
-    this.html.setAttribute("data-key", this.key)
-  }
+    this.html.setAttribute('data-key', this.key);
+  };
 }
 
 const capitaliseWord = (text) => {
   if (text.length === 0) return text;
-  return text[0].toUpperCase() + text.slice(1)
-}
+  return text[0].toUpperCase() + text.slice(1);
+};
 
 const convertToProperCode = (key) => {
   return key.toLowerCase();
-}
+};
 
 const changeKeyboardLanguage = () => {
   Keyboard.languageIndex = (Keyboard.languageIndex + 1) % LANGUAGES.length;
   languageIndicator.textContent = LANGUAGES[Keyboard.languageIndex];
-  keyboard.buttons.forEach(button => button.changeLanguage())
-}
+  keyboard.buttons.forEach(button => button.changeLanguage());
+};
 
 const checkForSpecialShortcuts = (e) => {
-  if (e.altKey && e.shiftKey &&  !Keyboard.isLanguageChanged) {
-    Keyboard.isLanguageChanged = true;
+  if (e.altKey && e.shiftKey && !Keyboard.isLanguageChanged) {
     changeKeyboardLanguage();
     return true;
   }
 
-  if(e.ctrlKey && convertToProperCode(e.code) === 'keya'){
-    textArea.setSelectionRange(0, textArea.value.length, "forward")
-    textArea.select()
+  if (e.ctrlKey && convertToProperCode(e.code) === 'keya') {
+    textArea.setSelectionRange(0, textArea.value.length, 'forward');
+    textArea.select();
     return true;
   }
 
   return false;
-}
+};
 
 const keyDownEventHandler = (e) => {
-  textArea.focus()
-  let code = convertToProperCode(e.code);
-  const button = document.querySelector(`.button[data-key="${code}"]`)
-  button?.classList.add("button__active")
+  textArea.focus();
+  const code = convertToProperCode(e.code);
+  const button = document.querySelector(`.button[data-key="${code}"]`);
+  button?.classList.add('button__active');
 
   if (code === 'shiftleft' || code === 'shiftright') {
     keyboard.switchToSecondaryValues();
@@ -202,18 +199,19 @@ const keyDownEventHandler = (e) => {
   e.preventDefault();
   if (checkForSpecialShortcuts(e)) return;
 
-  let selectionStart = textArea.selectionStart;
-  let selectionEnd = textArea.selectionEnd;
+  const selectionStart = textArea.selectionStart;
+  const selectionEnd = textArea.selectionEnd;
 
-  textArea.value = textArea.value.slice(0, selectionStart) + keyboard.getButtonText(code, e.shiftKey) + textArea.value.slice(selectionEnd)
-  textArea.setSelectionRange(selectionStart + 1, selectionStart + 1)
-}
+  textArea.value = textArea.value.slice(0, selectionStart) + keyboard.getButtonText(code, e.shiftKey) + textArea.value.slice(selectionEnd);
+  textArea.setSelectionRange(selectionStart + 1, selectionStart + 1);
+};
 
 const keyUpEventHandler = (e) => {
+  textArea.focus();
   const code = convertToProperCode(e.code);
 
-  const button = document.querySelector(`.button[data-key="${code}"]`)
-  button?.classList.remove("button__active")
+  const button = document.querySelector(`.button[data-key="${code}"]`);
+  button?.classList.remove('button__active');
   if (notAllowedCodes.includes(code)) return;
 
   if (code === 'shiftleft' || code === 'shiftright') {
@@ -223,13 +221,54 @@ const keyUpEventHandler = (e) => {
 
   Keyboard.isLanguageChanged = false;
   e.preventDefault();
-}
+};
 
-let notAllowedCodes = ['arrowup', 'arrowleft', 'arrowdown', 'arrowright', 'backspace', 'delete', "enter"]
+const keyClickEventHandler = (e) => {
+  textArea.focus();
+  const code = e.target.getAttribute('data-key');
+
+  const button = document.querySelector(`.button[data-key="${code}"]`);
+  button?.classList.add('button__active');
+
+  const selectionStart = textArea.selectionStart;
+  const selectionEnd = textArea.selectionEnd;
+
+  textArea.value = textArea.value.slice(0, selectionStart) + keyboard.getButtonText(code, e.shiftKey) + textArea.value.slice(selectionEnd);
+
+  console.log(textArea.value);
+
+  if (code == 'backspace') {
+    textArea.value = textArea.value.slice(0, selectionStart - 1) + textArea.value.slice(selectionEnd);
+    textArea.setSelectionRange(selectionStart - 1, selectionStart - 1);
+  }
+
+  if (code == 'delete') {
+    textArea.value = textArea.value.slice(0, selectionStart) + textArea.value.slice(selectionEnd + 1);
+    textArea.setSelectionRange(selectionStart, selectionStart);
+  }
+
+  if (code == 'arrowleft') {
+    console.log(code);
+    console.log(selectionStart);
+    console.log(selectionEnd);
+    textArea.setSelectionRange(selectionStart - 1, selectionStart - 1);
+  }
+
+  if (code == 'arrowright') {
+    console.log(code);
+    console.log(selectionStart);
+    console.log(selectionEnd);
+    textArea.setSelectionRange(selectionStart + 1, selectionStart + 1);
+  }
+
+  button?.classList.remove('button__active');
+};
+
+const notAllowedCodes = ['arrowup', 'arrowleft', 'arrowdown', 'arrowright', 'backspace', 'delete', 'enter'];
 
 const keyboardButtons = [
   [
-    new Button('backquote', '`', '`', ['button__regular'], false, false, '~', '~'),
+    new Button('backquote', ['`', 'ё'], ['`', 'ё'], ['button__regular'], false, false, '~', '~'),
     new Button('digit1', '1', '1', ['button__regular'], false, false, '!', '!'),
     new Button('digit2', '2', '2', ['button__regular'], false, false, '@', '@'),
     new Button('digit3', '3', '3', ['button__regular'], false, false, '#', '#'),
@@ -259,7 +298,7 @@ const keyboardButtons = [
     new Button('bracketLeft', ['[', 'х'], ['[', 'х'], ['button__regular']),
     new Button('bracketRight', [']', 'ъ'], [']', 'ъ'], ['button__regular']),
     new Button('backslash', '\\', '\\', ['button__regular'], false, false, '/', '/'),
-    new Button('delete', '', 'Delete', ['button__large'], true, true),
+    new Button('delete', '', 'Delete', ['button__large'], true, true)
   ],
   [
     new Button('capslock', '', 'Caps Lock', ['button__larger'], true, true),
@@ -274,7 +313,7 @@ const keyboardButtons = [
     new Button('keyl', ['l', 'д'], ['l', 'д'], ['button__regular']),
     new Button('semicolon', [';', 'ж'], [';', 'ж'], ['button__regular']),
     new Button('quote', ['\'', 'э'], ['\'', 'э'], ['button__regular']),
-    new Button('enter', '\n', 'Enter', ['button__larger'], true, true),
+    new Button('enter', '\n', 'Enter', ['button__larger'], true, true)
   ],
   [
     new Button('shiftLeft', '', 'Shift', ['button__larger'], true, true),
@@ -288,32 +327,32 @@ const keyboardButtons = [
     new Button('comma', [',', 'б'], [',', 'б'], ['button__regular']),
     new Button('period', ['.', 'ю'], ['.', 'ю'], ['button__regular']),
     new Button('slash', ['/', '.'], ['/', '.'], ['button__regular']),
-    new Button('arrowUp', '', "↑", ['button__large'], true, true),
-    new Button('shiftRight', '', "Shift", ['button__large'], true, true),
+    new Button('arrowUp', '', '↑', ['button__large'], true, true),
+    new Button('shiftRight', '', 'Shift', ['button__large'], true, true)
   ],
   [
     new Button('controlleft', '', 'Ctrl', ['button__large'], true, true),
-    new Button('metaleft', 'windows', 'Win', ['button__large'], true, true),
+    new Button('metaleft', '', 'Win', ['button__large'], true, true),
     new Button('altLeft', '', 'Alt', ['button__large'], true, true),
     new Button('space', ' ', '', ['button__whitespace'], true, true),
     new Button('altRight', '', 'Alt', ['button__large'], true, true),
     new Button('controlright', '', 'Ctrl', ['button__large'], true, true),
-    new Button('arrowleft', '', "←", ['button__large'], true, true),
-    new Button('arrowdown', '', "↓", ['button__large'], true, true),
-    new Button('arrowright', '', "→", ['button__large'], true, true)
+    new Button('arrowleft', '', '←', ['button__large'], true, true),
+    new Button('arrowdown', '', '↓', ['button__large'], true, true),
+    new Button('arrowright', '', '→', ['button__large'], true, true)
   ]
-]
+];
 
-const keyboard = new Keyboard(keyboardButtons)
+const keyboard = new Keyboard(keyboardButtons);
 
 const renderKeyboard = () => {
   for (let i = 0; i < keyboardButtons.length; i++) {
-    keyboard.addRow(new Row(keyboardButtons[i]).getHtml())
+    keyboard.addRow(new Row(keyboardButtons[i]).getHtml());
   }
-}
+};
 
 renderKeyboard();
 
 document.addEventListener('keydown', keyDownEventHandler);
 document.addEventListener('keyup', keyUpEventHandler);
-
+document.addEventListener('click', keyClickEventHandler);
