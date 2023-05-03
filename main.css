@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root{
+    width: 100vw;
+    height: 100vh;
+    background-color: blueviolet;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-family: Inconsolata, sans-serif;
+}
+
+#languageIndicator{
+    padding: 10px 10px 10px 30px;
+    font-size: 22px;
+    font-weight: bolder;
+    color: white;
+}
+
+#keyboardIndicator{
+    text-align: center;
+    padding: 10px;
+    font-size: 26px;
+    font-weight: bolder;
+    color: #efed67;
+}
+
+#keyboard{
+    width: 100%;
+    padding: 10px 25px;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.keyboard-row{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.keyboard-row:last-child{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.button{
+    height: 50px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.button__regular{
+    width: 50px;
+    background: black;
+    color: white;
+}
+
+.button__large{
+    width: 60px;
+    background: green;
+    color: white;
+}
+
+.button__larger{
+    width: 95px;
+    background: green;
+    color: white;
+}
+.button__whitespace{
+    width: 275px;
+    background: green;
+    color: white;
+}
+
+.button-capslock__on{
+    background: #c41414;
+}
+
+.button:hover,
+.button__active{
+    background-color: #e0c91e;
+    animation: ease-in-out;
+    box-shadow: 1px 1px green;
+    transition: 0.15s;
+}
+
+#textArea{
+    resize: none;
+    height: 400px;
+    margin: 10px;
+    padding: 5px;
+    letter-spacing: 0.6px;
+}
