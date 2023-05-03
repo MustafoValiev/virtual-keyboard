@@ -92,6 +92,9 @@
 .button:hover,
 .button__active{
     background-color: #e0c91e;
+    animation: ease-in-out;
+    box-shadow: 1px 1px green;
+    transition: 0.15s;
 }
 
 #textArea{
